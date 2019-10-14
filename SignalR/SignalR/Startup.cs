@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SignalR.Entities;
 
 namespace SignalR
 {
@@ -25,6 +26,15 @@ namespace SignalR
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+                builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:4200");
+            }));
+
+            services.AddSignalR();
             services.AddControllers();
         }
 
@@ -35,15 +45,13 @@ namespace SignalR
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotifyHub>("/notify");
                 endpoints.MapControllers();
             });
         }
