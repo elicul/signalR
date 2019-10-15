@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     const connection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Information)
-      .withUrl('https://localhost:5628/notify')
+      .withUrl('http://localhost:5000/notify')
       .build();
 
     connection
