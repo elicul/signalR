@@ -22,6 +22,9 @@ export class AppComponent implements OnInit {
       .start()
       .then(() => {
         console.log('Connected!');
+        connection.invoke('GetConnectionId').then(connectionId => {
+          console.log('ConnectionId:', connectionId);
+        });
       })
       .catch(err => {
         return console.error(err.toString());
