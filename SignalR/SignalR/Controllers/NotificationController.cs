@@ -24,7 +24,7 @@ namespace SignalR.Controllers
 
             try
             {
-                _hubContext.Clients.All.BroadcastMessage(msg.Type, msg.Payload);
+                _hubContext.Clients.Client(msg.ConnectionId).BroadcastMessage(msg.Type, msg.Payload);
                 retMessage = "Success";
             }
             catch (Exception e)

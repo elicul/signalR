@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +29,7 @@ namespace SignalR
             }));
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
             services.AddControllers();
         }
 
@@ -44,7 +46,7 @@ namespace SignalR
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<NotifyHub>("/notify");
+                endpoints.MapHub<NotifyHub>("/signalr");
                 endpoints.MapControllers();
             });
         }
