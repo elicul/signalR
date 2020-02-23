@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR", "SignalR\SignalR.csproj", "{9D2C5994-048A-421A-8EC6-8DDA1DE4D6D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalR", "SignalR\SignalR.csproj", "{9D2C5994-048A-421A-8EC6-8DDA1DE4D6D0}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SignalRClient", "SignalRClient\", "{61B11B72-BAF5-4E51-9B38-31336A2687EC}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -26,6 +26,12 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SignalRClient", "SignalRCli
 		SlnRelativePath = "SignalRClient\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Contracts", "SignalR.Contracts\SignalR.Contracts.csproj", "{44012519-7238-4051-BFF6-25DE00C0A851}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Domain", "SignalR.Domain\SignalR.Domain.csproj", "{6E29E059-EB81-436B-8BEF-208CDABBE7DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Infrastructure", "SignalR.Infrastructure\SignalR.Infrastructure.csproj", "{8A2582AD-9EA7-442F-93EB-46868A10D1B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +46,18 @@ Global
 		{61B11B72-BAF5-4E51-9B38-31336A2687EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61B11B72-BAF5-4E51-9B38-31336A2687EC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{61B11B72-BAF5-4E51-9B38-31336A2687EC}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{44012519-7238-4051-BFF6-25DE00C0A851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44012519-7238-4051-BFF6-25DE00C0A851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44012519-7238-4051-BFF6-25DE00C0A851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44012519-7238-4051-BFF6-25DE00C0A851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E29E059-EB81-436B-8BEF-208CDABBE7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E29E059-EB81-436B-8BEF-208CDABBE7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E29E059-EB81-436B-8BEF-208CDABBE7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E29E059-EB81-436B-8BEF-208CDABBE7DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2582AD-9EA7-442F-93EB-46868A10D1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2582AD-9EA7-442F-93EB-46868A10D1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2582AD-9EA7-442F-93EB-46868A10D1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2582AD-9EA7-442F-93EB-46868A10D1B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

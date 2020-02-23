@@ -6,3 +6,6 @@
 /SignalR/SignalR/obj
 /SignalR/SignalR/bin/Debug/netcoreapp3.0
 /SignalR/SignalR/bin/Debug/netcoreapp3.1
+/SignalR/SignalR.Contracts/obj
+/SignalR/SignalR.Domain/obj
+/SignalR/SignalR.Infrastructure/obj
