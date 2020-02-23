@@ -1,19 +1,22 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using SignalR.Entities;
-using SignalR.Interfaces;
+using SignalR.Contracts.Entities;
+using SignalR.Contracts.Interfaces.Domain;
+using SignalR.Contracts.Interfaces.Hubs;
 
 namespace SignalR.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class NotificationController : ControllerBase
+    public class NotificationController : BaseController
     {
+        private readonly IUserService _userService;
         private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
 
-        public NotificationController(IHubContext<NotifyHub, ITypedHubClient> hubContext)
+        public NotificationController(IHubContext<NotifyHub, ITypedHubClient> hubContext, IUserService userService)
         {
+            _userService = userService;
             _hubContext = hubContext;
         }
 

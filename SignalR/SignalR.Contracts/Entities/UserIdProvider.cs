@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
 
-namespace SignalR.Entities
+namespace SignalR.Contracts.Entities
 {
     public class UserIdProvider : IUserIdProvider
     {

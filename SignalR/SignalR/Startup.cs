@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SignalR.Entities;
+using SignalR.Contracts.Entities;
+using SignalR.Contracts.Interfaces.Domain;
+using SignalR.Domain.Services;
 
 namespace SignalR
 {
@@ -30,6 +32,7 @@ namespace SignalR
 
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
+            services.AddScoped<IUserService, UserService>();
             services.AddControllers();
         }
 

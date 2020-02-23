@@ -1,6 +1,6 @@
-﻿namespace SignalR.Entities
+﻿namespace SignalR.Contracts.Entities
 {
-    public class Message
+    public class Message: BaseEntity
     {
         public string Type { get; set; }
         public string Payload { get; set; }
