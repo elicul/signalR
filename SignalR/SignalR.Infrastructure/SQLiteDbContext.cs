@@ -1,27 +1,45 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using SignalR.Contracts.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace SignalR.Infrastructure
 {
-    public class UserDbContext : DbContext
+    public class SQLiteDbContext : DbContext, IDesignTimeDbContextFactory<SQLiteDbContext> 
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public SQLiteDbContext() : base()
         {
-            base.OnConfiguring(optionsBuilder);
         }
 
-        public UserDbContext(DbContextOptions<UserDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+        public SQLiteDbContext(DbContextOptions<SQLiteDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
+
+        public SQLiteDbContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<SQLiteDbContext>();
+            optionsBuilder.UseSqlite("Filename=SQLite.db");
+
+            return new SQLiteDbContext(optionsBuilder.Options, httpContextAccessor);
+        }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlite("Filename=TestDatabase.db", options =>
+        //    {
+        //        options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
+        //    });
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,13 +59,6 @@ namespace SignalR.Infrastructure
 
             base.OnModelCreating(modelBuilder);
         }
-
-        public override DbSet<TEntity> Set<TEntity>()
-        {
-            SetCreatedAndLastModified();
-            return base.Set<TEntity>();
-        }
-
         private static void Seed(ModelBuilder modelBuilder)
         {
             var currentDateUtc = DateTime.UtcNow;
@@ -56,7 +67,7 @@ namespace SignalR.Infrastructure
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     CreatedBy = createdBy,
                     CreatedDateUtc = currentDateUtc,
                     LastModifiedBy = createdBy,
@@ -66,16 +77,10 @@ namespace SignalR.Infrastructure
                 });
         }
 
-        protected static DbContextOptions<T> ChangeOptionsType<T>(DbContextOptions options) where T : DbContext
+        public override DbSet<TEntity> Set<TEntity>()
         {
-            var sqlExt = options.Extensions.FirstOrDefault(e => e is SqlServerOptionsExtension);
-
-            if (sqlExt == null)
-                throw (new Exception("Failed to retrieve SQL connection string for base Context"));
-
-            return new DbContextOptionsBuilder<T>()
-                .UseSqlServer(((SqlServerOptionsExtension)sqlExt).ConnectionString)
-                .Options;
+            SetCreatedAndLastModified();
+            return base.Set<TEntity>();
         }
 
         private void SetCreatedAndLastModified(string username = "system")

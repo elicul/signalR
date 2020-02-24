@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using SignalR.Contracts.Entities;
 using SignalR.Contracts.Interfaces.Domain;
 using SignalR.Domain.Services;
+using SignalR.Infrastructure;
 
 namespace SignalR
 {
@@ -34,6 +35,7 @@ namespace SignalR
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();
+            services.AddEntityFrameworkSqlite().AddDbContext<SQLiteDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace SignalR.Infrastructure.Repositories
 {
-    public class UserRepository : BaseRepository<UserDbContext, User>, IUserRepository
+    public class UserRepository : BaseRepository<SQLiteDbContext, User>, IUserRepository
     {
         private readonly ILogger logger;
-        private readonly UserDbContext dbContext;
+        private readonly SQLiteDbContext dbContext;
         private readonly DbSet<User> user;
 
-        public UserRepository(ILogger<UserRepository> logger, UserDbContext context) : base(context)
+        public UserRepository(ILogger<UserRepository> logger, SQLiteDbContext context) : base(context)
         {
             this.logger = logger;
             dbContext = context;

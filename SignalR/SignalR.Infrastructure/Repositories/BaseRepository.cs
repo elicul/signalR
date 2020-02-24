@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SignalR.Infrastructure.Repositories
 {
-    public abstract class BaseRepository<TDbContext, TEntity> : IBaseRepository<TEntity> where TDbContext : UserDbContext where TEntity : class, new()
+    public abstract class BaseRepository<TDbContext, TEntity> : IBaseRepository<TEntity> where TDbContext : SQLiteDbContext where TEntity : class, new()
     {
         protected readonly DbSet<TEntity> dbSet;
         private readonly TDbContext context;

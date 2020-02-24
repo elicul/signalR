@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
@@ -20,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SignalR.Contracts\SignalR.Contracts.csproj" />
     <ProjectReference Include="..\SignalR.Domain\SignalR.Domain.csproj" />
+    <ProjectReference Include="..\SignalR.Infrastructure\SignalR.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
