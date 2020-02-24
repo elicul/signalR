@@ -11,13 +11,13 @@ namespace SignalR.Controllers
     [Route("api/[controller]")]
     public class NotificationController : BaseController
     {
-        private readonly IUserService _userService;
-        private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
+        private readonly IUserService userService;
+        private IHubContext<NotifyHub, ITypedHubClient> hubContext;
 
         public NotificationController(IHubContext<NotifyHub, ITypedHubClient> hubContext, IUserService userService)
         {
-            _userService = userService;
-            _hubContext = hubContext;
+            this.userService = userService;
+            this.hubContext = hubContext;
         }
 
         [HttpPost]
@@ -27,7 +27,7 @@ namespace SignalR.Controllers
 
             try
             {
-                _hubContext.Clients.Client(msg.ConnectionId).BroadcastMessage(msg.Type, msg.Payload);
+                hubContext.Clients.Client(msg.ConnectionId).BroadcastMessage(msg.Type, msg.Payload);
                 retMessage = "Success";
             }
             catch (Exception e)
