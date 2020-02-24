@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SignalR.Infrastructure.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,7 @@ namespace SignalR.Infrastructure.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDateUtc = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
-                    Email = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
                     TenantGuid = table.Column<Guid>(nullable: false),
                     TenantType = table.Column<string>(nullable: true),
                     ConnectionId = table.Column<string>(nullable: true)
@@ -30,7 +30,7 @@ namespace SignalR.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "ConnectionId", "CreatedBy", "CreatedDateUtc", "Email", "LastModifiedBy", "LastModifiedDateUtc", "TenantGuid", "TenantType" },
-                values: new object[] { new Guid("ac6d6c33-6bbf-4446-888d-3292e5c181ea"), null, "System", new DateTime(2020, 2, 24, 21, 2, 29, 963, DateTimeKind.Utc).AddTicks(188), "demo@demo.com", "System", new DateTime(2020, 2, 24, 21, 2, 29, 963, DateTimeKind.Utc).AddTicks(188), new Guid("00000000-0000-0000-0000-000000000000"), null });
+                values: new object[] { new Guid("06bfc2e0-a474-471f-8a0a-28cc2e3e5bb1"), "12345", "System", new DateTime(2020, 2, 24, 22, 5, 13, 50, DateTimeKind.Utc).AddTicks(2085), "demo@demo.com", "System", new DateTime(2020, 2, 24, 22, 5, 13, 50, DateTimeKind.Utc).AddTicks(2085), new Guid("a8aeb35c-02cf-4626-9062-934eb2ac3580"), "Carrier" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

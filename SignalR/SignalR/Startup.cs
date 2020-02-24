@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SignalR.Contracts.Entities;
+using Microsoft.Extensions.Logging;
 using SignalR.Contracts.Interfaces.Domain;
+using SignalR.Contracts.Interfaces.Infrastructure;
 using SignalR.Domain.Services;
+using SignalR.Hubs;
 using SignalR.Infrastructure;
+using SignalR.Infrastructure.Repositories;
 
 namespace SignalR
 {
@@ -32,15 +37,30 @@ namespace SignalR
             }));
 
             services.AddSignalR();
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
+
+            var connection = Configuration["ConnectionStrings:DefaultConnection"];
+            services.AddEntityFrameworkSqlite()
+                .AddDbContext<SQLiteDbContext>(options => options.UseSqlite(connection));
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();
             services.AddEntityFrameworkSqlite().AddDbContext<SQLiteDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            //loggerFactory.CreateLogger() .AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddProvider().AddDebug();
+            //loggerFactory.AddFile("Logs/{Date}.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

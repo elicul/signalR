@@ -7,7 +7,7 @@ namespace SignalR.Contracts.DTOs
         public string ErrorMessage { get; set; }
         public ResultStatus ResultStatus { get; set; }
 
-        protected ResultDto()
+        public ResultDto()
         {
             ResultStatus = ResultStatus.Ok;
         }

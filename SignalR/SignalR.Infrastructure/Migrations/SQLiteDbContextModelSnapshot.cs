@@ -32,6 +32,7 @@ namespace SignalR.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -58,14 +59,16 @@ namespace SignalR.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ac6d6c33-6bbf-4446-888d-3292e5c181ea"),
+                            Id = new Guid("06bfc2e0-a474-471f-8a0a-28cc2e3e5bb1"),
+                            ConnectionId = "12345",
                             CreatedBy = "System",
-                            CreatedDateUtc = new DateTime(2020, 2, 24, 21, 2, 29, 963, DateTimeKind.Utc).AddTicks(188),
+                            CreatedDateUtc = new DateTime(2020, 2, 24, 22, 5, 13, 50, DateTimeKind.Utc).AddTicks(2085),
                             Email = "demo@demo.com",
                             IsDeleted = false,
                             LastModifiedBy = "System",
-                            LastModifiedDateUtc = new DateTime(2020, 2, 24, 21, 2, 29, 963, DateTimeKind.Utc).AddTicks(188),
-                            TenantGuid = new Guid("00000000-0000-0000-0000-000000000000")
+                            LastModifiedDateUtc = new DateTime(2020, 2, 24, 22, 5, 13, 50, DateTimeKind.Utc).AddTicks(2085),
+                            TenantGuid = new Guid("a8aeb35c-02cf-4626-9062-934eb2ac3580"),
+                            TenantType = "Carrier"
                         });
                 });
 #pragma warning restore 612, 618

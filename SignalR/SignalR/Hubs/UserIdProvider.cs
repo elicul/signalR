@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace SignalR.Contracts.Entities
+namespace SignalR.Hubs
 {
     public class UserIdProvider : IUserIdProvider
     {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using SignalR.Contracts.Entities;
 using SignalR.Contracts.Interfaces.Domain;
 using SignalR.Contracts.Interfaces.Hubs;
+using SignalR.Hubs;
 
 namespace SignalR.Controllers
 {

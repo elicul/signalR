@@ -14,6 +14,7 @@ namespace SignalR.Infrastructure
     public class SQLiteDbContext : DbContext, IDesignTimeDbContextFactory<SQLiteDbContext> 
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly DbContextOptions<SQLiteDbContext> options;
 
         public SQLiteDbContext() : base()
         {
@@ -22,12 +23,23 @@ namespace SignalR.Infrastructure
         public SQLiteDbContext(DbContextOptions<SQLiteDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.options = options;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
         }
 
         public SQLiteDbContext CreateDbContext(string[] args)
         {
+            var sqlExt = options.Extensions.FirstOrDefault(e => e is SqliteDbContextOptionsBuilderExtensions);
+
+            if (sqlExt == null)
+                throw (new Exception("Failed to retrieve SQL connection string for base Context"));
+
             var optionsBuilder = new DbContextOptionsBuilder<SQLiteDbContext>();
-            optionsBuilder.UseSqlite("Filename=SQLite.db");
+            optionsBuilder.UseSqlite(((SqlServerOptionsExtension)sqlExt).ConnectionString);
 
             return new SQLiteDbContext(optionsBuilder.Options, httpContextAccessor);
         }
@@ -43,6 +55,8 @@ namespace SignalR.Infrastructure
 
             modelBuilder.Entity<User>().HasKey(k => k.Id);
             modelBuilder.Entity<User>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+            modelBuilder.Entity<User>().Property(p => p.Email).IsRequired();
+            modelBuilder.Entity<User>().Property(p => p.TenantGuid).IsRequired();
             modelBuilder.Entity<User>().Property(x => x.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<User>().ToTable("Users");
 
@@ -59,12 +73,15 @@ namespace SignalR.Infrastructure
                 new User
                 {
                     Id = Guid.NewGuid(),
+                    Email = "demo@demo.com",
+                    TenantGuid = Guid.NewGuid(),
+                    TenantType = "Carrier",
+                    ConnectionId = "12345",
                     CreatedBy = createdBy,
                     CreatedDateUtc = currentDateUtc,
                     LastModifiedBy = createdBy,
                     LastModifiedDateUtc = currentDateUtc,
                     IsDeleted = false,
-                    Email = "demo@demo.com"
                 });
         }
 

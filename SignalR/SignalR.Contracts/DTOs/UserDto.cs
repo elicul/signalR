@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace SignalR.Contracts.Entities
+namespace SignalR.Contracts.DTOs
 {
-    public class User: BaseEntity
+    public class UserDto
     {
-        public Guid Id { get; set; }
         public string Email { get; set; }
         public Guid TenantGuid { get; set; }
         public string TenantType { get; set; }
