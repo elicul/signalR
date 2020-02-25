@@ -24,12 +24,17 @@ namespace SignalR.Infrastructure.Repositories
 
         public async Task<List<User>> GetUsersAsync()
         {
-            return await GetAll().Where(u => u.IsDeleted == false).ToListAsync<User>();
+            return await GetAll().AsNoTracking().Where(u => u.IsDeleted == false).ToListAsync<User>();
         }
 
         public async Task<User> GetUserAsync(Guid userId)
         {
-            return await dbSet.Where(u => u.Id == userId && u.IsDeleted == false).FirstOrDefaultAsync();
+            return await dbSet.AsNoTracking().Where(u => u.Id == userId && u.IsDeleted == false).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetUserByTenantGuidAndEmailAsync(Guid tenantGuid, string email)
+        {
+            return await dbSet.AsNoTracking().Where(u => u.TenantGuid == tenantGuid && u.Email == email && u.IsDeleted == false).FirstOrDefaultAsync();
         }
 
         public async Task AddUserAsyc(User user)

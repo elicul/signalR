@@ -9,8 +9,8 @@ using SignalR.Infrastructure;
 namespace SignalR.Infrastructure.Migrations
 {
     [DbContext(typeof(SQLiteDbContext))]
-    [Migration("20200224220513_Init")]
-    partial class Init
+    [Migration("20200225212127_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,9 +27,6 @@ namespace SignalR.Infrastructure.Migrations
                     b.Property<string>("ConnectionId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("TEXT");
 
@@ -41,9 +38,6 @@ namespace SignalR.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModifiedDateUtc")
                         .HasColumnType("TEXT");
@@ -61,15 +55,13 @@ namespace SignalR.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("06bfc2e0-a474-471f-8a0a-28cc2e3e5bb1"),
+                            Id = new Guid("160071b0-a6f3-4832-a734-40d0e773f127"),
                             ConnectionId = "12345",
-                            CreatedBy = "System",
-                            CreatedDateUtc = new DateTime(2020, 2, 24, 22, 5, 13, 50, DateTimeKind.Utc).AddTicks(2085),
+                            CreatedDateUtc = new DateTime(2020, 2, 25, 21, 21, 26, 946, DateTimeKind.Utc).AddTicks(1669),
                             Email = "demo@demo.com",
                             IsDeleted = false,
-                            LastModifiedBy = "System",
-                            LastModifiedDateUtc = new DateTime(2020, 2, 24, 22, 5, 13, 50, DateTimeKind.Utc).AddTicks(2085),
-                            TenantGuid = new Guid("a8aeb35c-02cf-4626-9062-934eb2ac3580"),
+                            LastModifiedDateUtc = new DateTime(2020, 2, 25, 21, 21, 26, 946, DateTimeKind.Utc).AddTicks(1669),
+                            TenantGuid = new Guid("3bf1ef56-84f5-434b-aaaf-e0a5040f87bd"),
                             TenantType = "Carrier"
                         });
                 });

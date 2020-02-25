@@ -23,8 +23,7 @@ namespace SignalR.Hubs
 
         public async Task<ResultDto> SaveUserConnection(UserDto user)
         {
-            var result = await userService.PostUserAsync(user);
-            return new ResultDto();
+            return await userService.SaveUserAsync(user);
         }
     }
 }

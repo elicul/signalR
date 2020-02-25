@@ -49,7 +49,6 @@ namespace SignalR.Infrastructure
         private static void Seed(ModelBuilder modelBuilder)
         {
             var currentDateUtc = DateTime.UtcNow;
-            var createdBy = "System";
 
             modelBuilder.Entity<User>().HasData(
                 new User
@@ -59,47 +58,10 @@ namespace SignalR.Infrastructure
                     TenantGuid = Guid.NewGuid(),
                     TenantType = "Carrier",
                     ConnectionId = "12345",
-                    CreatedBy = createdBy,
                     CreatedDateUtc = currentDateUtc,
-                    LastModifiedBy = createdBy,
                     LastModifiedDateUtc = currentDateUtc,
                     IsDeleted = false,
                 });
-        }
-
-        public override DbSet<TEntity> Set<TEntity>()
-        {
-            SetCreatedAndLastModified();
-            return base.Set<TEntity>();
-        }
-
-        private void SetCreatedAndLastModified(string username = "system")
-        {
-            var currentUtcTime = DateTime.UtcNow;
-            var entries = ChangeTracker.Entries().Where(x => x.Entity != null && typeof(BaseEntity).IsAssignableFrom(x.Entity.GetType()));
-            foreach (var entry in entries)
-            {
-                BaseEntity entity = entry.Entity as BaseEntity;
-                if (entity == null)
-                    continue;
-
-                if (entry.State == EntityState.Added)
-                {
-                    entity.CreatedDateUtc = currentUtcTime;
-                    entity.LastModifiedDateUtc = currentUtcTime;
-                    if (!string.IsNullOrEmpty(username))
-                    {
-                        entity.CreatedBy = username;
-                        entity.LastModifiedBy = username;
-                    }
-                }
-                else if (entry.State == EntityState.Modified)
-                {
-                    entity.LastModifiedDateUtc = currentUtcTime;
-                    if (!string.IsNullOrEmpty(username))
-                        entity.LastModifiedBy = username;
-                }
-            }
         }
     }
 }

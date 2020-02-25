@@ -20,107 +20,46 @@ namespace SignalR.Domain.Services
             this.userRepository = userRepository;
         }
 
-        public async Task<ResultDto<List<User>>> GetUsersAsync()
+        public async Task<ResultDto> SaveUserAsync(UserDto userDto)
         {
-            var result = new ResultDto<List<User>>();
+            var result = new ResultDto();
             try
             {
-                result.Data = await userRepository.GetUsersAsync();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Error retrieving Users. EX: {ex}");
-                result.ErrorMessage = $"Error retrieving Users. EX: {ex}";
-                result.Data = null;
-                result.ResultStatus = Contracts.Enums.ResultStatus.Error;
-            }
-            return result;
-        }
-
-        public async Task<ResultDto<User>> GetUserAsync(Guid userId)
-        {
-            var result = new ResultDto<User>();
-            try
-            {
-                result.Data = await userRepository.GetUserAsync(userId);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Error retrieving Users. EX: {ex}");
-                result.ErrorMessage = $"Error retrieving Users. EX: {ex}";
-                result.Data = null;
-                result.ResultStatus = Contracts.Enums.ResultStatus.Error;
-            }
-            return result;
-        }
-
-        public async Task<ResultDto<string>> PostUserAsync(UserDto userDto)
-        {
-            var result = new ResultDto<string>();
-            try
-            {
-                var user = new User
+                if(userDto.TenantGuid == null || userDto.TenantGuid == Guid.Empty || string.IsNullOrEmpty(userDto.Email))
                 {
-                    Email = userDto.Email,
-                    TenantGuid = userDto.TenantGuid,
-                    TenantType = userDto.TenantType,
-                    ConnectionId = userDto.ConnectionId
-                };
-                await userRepository.AddUserAsyc(user);
-                result.Data = "Succeeded";
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Error retrieving Users. EX: {ex}");
-                result.ErrorMessage = $"Error retrieving Users. EX: {ex}";
-                result.ResultStatus = Contracts.Enums.ResultStatus.Error;
-            }
-            return result;
-        }
-
-        public async Task<ResultDto<string>> PutUserAsync(UserDto userDto, Guid userId)
-        {
-            var result = new ResultDto<string>();
-            try
-            {
-                var user = new User
+                    logger.LogError($"Invalid arguments on method {nameof(SaveUserAsync)}");
+                    result.ErrorMessage = $"Invalid arguments on method {nameof(SaveUserAsync)}";
+                    result.ResultStatus = Contracts.Enums.ResultStatus.ArgumentsInvalid;
+                    return result;
+                }
+                var user = await userRepository.GetUserByTenantGuidAndEmailAsync(userDto.TenantGuid, userDto.Email);
+                if(user == null)
                 {
-                    Id = userId,
-                    Email = userDto.Email,
-                    TenantGuid = userDto.TenantGuid,
-                    TenantType = userDto.TenantType,
-                    ConnectionId = userDto.ConnectionId
-                };
-                result.Data = CheckIfUserExists(await userRepository.UpdateUserAsync(user));
+                    logger.LogInformation($"User not found {nameof(SaveUserAsync)}");
+                    await userRepository.AddUserAsyc(new User
+                    {
+                        Email = userDto.Email,
+                        TenantGuid = userDto.TenantGuid,
+                        TenantType = userDto.TenantType,
+                        ConnectionId = userDto.ConnectionId
+                    });
+                    logger.LogInformation($"User added {nameof(SaveUserAsync)}");
+                }
+                else
+                {
+                    logger.LogInformation($"User already exists {nameof(SaveUserAsync)}");
+                    user.ConnectionId = userDto.ConnectionId;
+                    await userRepository.UpdateUserAsync(user);
+                    logger.LogInformation($"User updated {nameof(SaveUserAsync)}");
+                }
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error retrieving Users. EX: {ex}");
-                result.ErrorMessage = $"Error retrieving Users. EX: {ex}";
+                logger.LogError($"Error saving user. EX: {ex}");
+                result.ErrorMessage = $"Error saving user. EX: {ex}";
                 result.ResultStatus = Contracts.Enums.ResultStatus.Error;
             }
             return result;
-        }
-
-        public async Task<ResultDto<string>> RemoveUserAsync(Guid userId)
-        {
-            var result = new ResultDto<string>();
-            try
-            {
-                result.Data = CheckIfUserExists(await userRepository.DeleteUserAsync(userId));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Error retrieving Users. EX: {ex}");
-                result.ErrorMessage = $"Error retrieving Users. EX: {ex}";
-                result.ResultStatus = Contracts.Enums.ResultStatus.Error;
-            }
-            return result;
-        }
-
-        private string CheckIfUserExists(bool value)
-        {
-            return value ? "Succeeded" : "Invalid user id";
         }
     }
 }

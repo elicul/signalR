@@ -13,5 +13,6 @@ namespace SignalR.Contracts.Interfaces.Infrastructure
         Task AddUserAsyc(User user);
         Task<bool> UpdateUserAsync(User user);
         Task<bool> DeleteUserAsync(Guid userId);
+        Task<User> GetUserByTenantGuidAndEmailAsync(Guid tenantGuid, string email);
     }
 }

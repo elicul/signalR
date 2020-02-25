@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SignalR.Contracts.Entities;
 using SignalR.Contracts.Interfaces.Infrastructure;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,13 +14,20 @@ namespace SignalR.Infrastructure.Repositories
 
         protected BaseRepository(TDbContext context)
         {
-
             this.context = context;
             dbSet = context.Set<TEntity>();
         }
 
         public async Task AddAsync(TEntity entity)
         {
+            if(entity is BaseEntity)
+            {
+                BaseEntity newEntity = entity as BaseEntity;
+
+                var currentUtcTime = DateTime.UtcNow;
+                newEntity.CreatedDateUtc = currentUtcTime;
+                newEntity.LastModifiedDateUtc = currentUtcTime;
+            }
             dbSet.Add(entity);
             await context.SaveChangesAsync();
         }
@@ -50,6 +59,13 @@ namespace SignalR.Infrastructure.Repositories
 
         public async Task UpdateAsync(TEntity entity)
         {
+            if (entity is BaseEntity)
+            {
+                BaseEntity newEntity = entity as BaseEntity;
+
+                var currentUtcTime = DateTime.UtcNow;
+                newEntity.LastModifiedDateUtc = currentUtcTime;
+            }
             context.Entry(entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
