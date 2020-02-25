@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 using SignalR.Contracts.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace SignalR.Infrastructure
 {
-    public class SQLiteDbContext : DbContext, IDesignTimeDbContextFactory<SQLiteDbContext> 
+    public class SQLiteDbContext : DbContext
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly DbContextOptions<SQLiteDbContext> options;
@@ -29,19 +24,6 @@ namespace SignalR.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-        }
-
-        public SQLiteDbContext CreateDbContext(string[] args)
-        {
-            var sqlExt = options.Extensions.FirstOrDefault(e => e is SqliteDbContextOptionsBuilderExtensions);
-
-            if (sqlExt == null)
-                throw (new Exception("Failed to retrieve SQL connection string for base Context"));
-
-            var optionsBuilder = new DbContextOptionsBuilder<SQLiteDbContext>();
-            optionsBuilder.UseSqlite(((SqlServerOptionsExtension)sqlExt).ConnectionString);
-
-            return new SQLiteDbContext(optionsBuilder.Options, httpContextAccessor);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

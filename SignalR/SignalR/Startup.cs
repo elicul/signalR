@@ -42,10 +42,9 @@ namespace SignalR
                 o.EnableDetailedErrors = true;
             });
 
-            var connection = Configuration["ConnectionStrings:DefaultConnection"];
-            services.AddEntityFrameworkSqlite()
-                .AddDbContext<SQLiteDbContext>(options => options.UseSqlite(connection));
 
+            services.AddDbContext<SQLiteDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
             services.AddScoped<IUserRepository, UserRepository>();
