@@ -23,6 +23,7 @@ namespace SignalR.Hubs
 
         public async Task<ResultDto> SaveUserConnection(UserDto user)
         {
+            await Groups.AddToGroupAsync(Context.ConnectionId, user.TenantGuid.ToString());
             return await userService.SaveUserAsync(user);
         }
     }

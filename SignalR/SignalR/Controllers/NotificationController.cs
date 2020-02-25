@@ -17,6 +17,13 @@ namespace SignalR.Controllers
             this.userService = userService;
         }
 
+        [HttpPost("{tenantGuid}")]
+        public async Task<ActionResult<string>> Post(Guid tenantGuid, [FromBody]Message message)
+        {
+            var result = await userService.SendMessageToTenantUsersAsync(tenantGuid, message);
+            return GetApiResponseFromResultDto<string>(result);
+        }
+
         [HttpPost("{email}/{tenantGuid}")]
         public async Task<ActionResult<string>> Post(string email, Guid tenantGuid, [FromBody]Message message)
         {

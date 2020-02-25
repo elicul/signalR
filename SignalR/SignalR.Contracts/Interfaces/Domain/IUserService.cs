@@ -9,5 +9,6 @@ namespace SignalR.Contracts.Interfaces.Domain
     {
         Task<ResultDto> SaveUserAsync(UserDto userDto);
         Task<ResultDto<string>> SendMessageToUserAsync(string email, Guid tenantGuid, Message message);
+        Task<ResultDto<string>> SendMessageToTenantUsersAsync(Guid tenantGuid, Message message);
     }
 }

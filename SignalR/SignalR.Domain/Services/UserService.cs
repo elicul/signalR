@@ -66,6 +66,32 @@ namespace SignalR.Domain.Services
             return result;
         }
 
+        public async Task<ResultDto<string>> SendMessageToTenantUsersAsync(Guid tenantGuid, Message message)
+        {
+            var result = new ResultDto<string>();
+            try
+            {
+                if (tenantGuid == null || tenantGuid == Guid.Empty || message == null
+                    || string.IsNullOrEmpty(message.Payload) || string.IsNullOrEmpty(message.Type))
+                {
+                    logger.LogError($"Invalid arguments on method {nameof(SendMessageToTenantUsersAsync)}.");
+                    result.ErrorMessage = $"Invalid arguments on method {nameof(SendMessageToTenantUsersAsync)}.";
+                    result.ResultStatus = Contracts.Enums.ResultStatus.ArgumentsInvalid;
+                    return result;
+                }
+                await hubContext.Clients.Group(tenantGuid.ToString()).BroadcastMessage(message.Type, message.Payload); 
+                logger.LogInformation($"Message sent to following group {tenantGuid.ToString()} {nameof(SendMessageToTenantUsersAsync)}");
+                result.Data = $"The message has been sent!";
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error saving user. EX: {ex}");
+                result.ErrorMessage = $"Error saving user. EX: {ex}";
+                result.ResultStatus = Contracts.Enums.ResultStatus.Error;
+            }
+            return result;
+        }
+
         public async Task<ResultDto<string>> SendMessageToUserAsync(string email, Guid tenantGuid, Message message)
         {
             var result = new ResultDto<string>();
