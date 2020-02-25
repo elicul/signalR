@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using SignalR.Contracts.Entities;
 using SignalR.Contracts.Interfaces.Domain;
-using SignalR.Contracts.Interfaces.Hubs;
-using SignalR.Hubs;
 
 namespace SignalR.Controllers
 {
@@ -13,30 +11,17 @@ namespace SignalR.Controllers
     public class NotificationController : BaseController
     {
         private readonly IUserService userService;
-        private IHubContext<NotifyHub, ITypedHubClient> hubContext;
 
-        public NotificationController(IHubContext<NotifyHub, ITypedHubClient> hubContext, IUserService userService)
+        public NotificationController(IUserService userService)
         {
             this.userService = userService;
-            this.hubContext = hubContext;
         }
 
-        [HttpPost]
-        public string Post([FromBody]Message msg)
+        [HttpPost("{email}/{tenantGuid}")]
+        public async Task<ActionResult<string>> Post(string email, Guid tenantGuid, [FromBody]Message message)
         {
-            string retMessage;
-
-            try
-            {
-                hubContext.Clients.Client(msg.ConnectionId).BroadcastMessage(msg.Type, msg.Payload);
-                retMessage = "Success";
-            }
-            catch (Exception e)
-            {
-                retMessage = e.ToString();
-            }
-
-            return retMessage;
+            var result = await userService.SendMessageToUserAsync(email, tenantGuid, message);
+            return GetApiResponseFromResultDto<string>(result);
         }
     }
 }
